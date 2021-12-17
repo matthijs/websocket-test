@@ -1,5 +1,7 @@
 #include <fmt/core.h>
 
+#include <thread>
+
 #include "websocket/connect_options.h"
 #include "websocket/connection.h"
 
@@ -7,7 +9,7 @@ boost::asio::awaitable<void> streaming() {
   std::string host = "streaming.saxobank.com";
   std::string target =
       "/sim/openapi/streamingws/connect?contextId=some-context-id";
-  std::string access_token = "token";
+  std::string access_token = "invalid-token";
 
   websocket::connect_options opts;
   opts.pingpong_timeout = std::chrono::seconds{0};
@@ -33,6 +35,7 @@ boost::asio::awaitable<void> streaming() {
         fmt::print("handle message: {}\n", ev.message().text());
       }
     }
+    std::this_thread::sleep_for(std::chrono::seconds{5});
   }
 }
 
