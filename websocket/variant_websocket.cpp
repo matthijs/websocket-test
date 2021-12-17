@@ -102,7 +102,10 @@ namespace websocket
     set_headers(opts.headers);
     boost::beast::websocket::response_type response;
     fmt::print("weboscket::connect: websocket handshake\n");
-    co_await client_handshake(response, host, target);
+    //co_await client_handshake(response, host, target);
+    boost::system::error_code ec;
+    visit([&](auto& ws) { ws.handshake(response, host, target, ec); });
+    fmt::print("weboscket::connect: response: {}, {}\n", ec.message(), response.result());
     fmt::print("weboscket::connect: websocket handshake done\n");
 
     // Disable timeouts on the tcp layer
